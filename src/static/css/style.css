@@ -1,55 +1,84 @@
-/* 전체 스타일 */
+/* 기본 스타일 */
 body {
-  margin: 0;
-  padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f4f4f4;
+    flex-direction: column; /* 세로 방향으로 배치 */
   color: #333;
   display: flex;
-  flex-direction: column;
+  justify-content: flex-start; /* 위쪽부터 시작 */
   align-items: center;
-  justify-content: center;
-  height: 100vh;
+  height: 100%;
+  margin: 0;
 }
 
-/* 제목 애니메이션: 왼쪽 화면 밖 → 중앙 */
+/* 로그인, 회원가입 컨테이너 */
+.login-container, .signup-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
 h1 {
-  font-size: 2.5rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
-  color: #111;
-
-  opacity: 0;
-  transform: translateX(-100vw);
-  animation: slideInFromLeft 1s ease-out forwards;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
 }
 
-@keyframes slideInFromLeft {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+label {
+  display: block;
+  text-align: left;
+  margin-top: 1rem;
 }
 
-/* 버튼 애니메이션: 아래에서 → 중앙, 5초 뒤에 시작 */
-button {
-  padding: 10px 30px;
-  font-size: 1rem;
-  background-color: #ffffff;
-  color: #111;
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1.2rem;
   border: 1px solid #ccc;
   border-radius: 5px;
-  cursor: pointer;
-
-  opacity: 0;
-  transform: translateY(50px);
-  animation: fadeInUp 1s ease-out forwards;
-  animation-delay: 1.1s;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+  input, button {
+    font-size: 1rem;
   }
 }

@@ -2,14 +2,39 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MoodMate</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </head>
 <body>
-  <h1>MoodMate</h1>
-  <a href="{{ url_for('login') }}">
-    <button>로그인</button>
-  </a>
+  <header>
+    <h1>MoodMate</h1>
+    <nav>
+      <a href="{{ url_for('login') }}"><button>로그인</button></a>
+      <a href="{{ url_for('signup') }}"><button>회원가입</button></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>오늘의 기분을 선택하고 맞춤 추천을 받아보세요!</h2>
+      <div class="mood-buttons">
+        <button data-mood="happy">😊 기쁨</button>
+        <button data-mood="sad">😢 슬픔</button>
+        <button data-mood="angry">😠 화남</button>
+        <button data-mood="relaxed">😌 편안함</button>
+      </div>
+    </section>
+
+    <section class="recommendation">
+      <h3>추천 내용</h3>
+      <p id="recommendation-text">기분을 선택하면 추천이 나타납니다.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 MoodMate. All rights reserved.</p>
+  </footer>
 </body>
 </html>
+  
