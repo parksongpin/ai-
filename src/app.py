@@ -3,16 +3,20 @@ import os
 from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, db
-import google.generativeai as genai
+from google import genai
+# import google.generativeai as genai
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+# client = genai.Client()
+client = genai.Client(api_key=GEMINI_API_KEY)
+# 🔹 Gemini API 초기화
 
 # Flask 초기화
 app = Flask(__name__)
 
 # 🔹 .env 불러오기
 load_dotenv()
-
-# 🔹 Gemini API 초기화
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+# genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # 🔹 Firebase 연결
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # src 폴더 경로
@@ -110,7 +114,7 @@ def test2():
         activity = request.form.get("activity")
 
         # Gemini API 요청
-        model = genai.GenerativeModel("gemini-pro")
+        # model = genai.GenerativeModel("gemini-pro")
         prompt = f"""
         사용자의 설문 응답:
         - 기분: {mood}
@@ -121,15 +125,17 @@ def test2():
         (곡명 - 가수 형식으로 간단히)
         """
 
-        response = model.generate_content(prompt)
-        recommendations = response.text if response else "추천 결과를 가져오지 못했습니다."
-
+        #response = model.generate_content(prompt)
+        #recommendations = response.text if response else "추천 결과를 가져오지 못했습니다."
+        recommendations = client.models.generate_content(model = "gemini-2.5-flash", contents = prompt)
         # 결과 페이지에 전달
+        print(f"recommendations: {recommendations}")
+        result_text = recommendations.candidates[0].content.parts[0].text
         return render_template("test2.html",
                                mood=mood,
                                genre=genre,
                                activity=activity,
-                               recommendations=recommendations)
+                               recommendations=result_text)
 
     return render_template("test2.html", recommendations=None)
     
