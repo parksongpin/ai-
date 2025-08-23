@@ -29,7 +29,7 @@ if not os.path.exists(cred_path):
 
 if not db_url:
     raise ValueError("❌ 환경변수 FIREBASE_DB_URL이 설정되지 않았습니다. .env 파일을 확인하세요.")
-
+# ????
 # Firebase 초기화 (중복 방지)
 if not firebase_admin._apps:
     cred = credentials.Certificate(cred_path)
