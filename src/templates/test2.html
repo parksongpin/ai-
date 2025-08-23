@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>노래 추천 결과</title>
+</head>
+<body>
+    <h1>🎶 노래 추천 결과 🎶</h1>
+
+    <p><strong>기분:</strong> {{ mood }}</p>
+    <p><strong>선호 장르:</strong> {{ genre }}</p>
+    <p><strong>현재 활동:</strong> {{ activity }}</p>
+
+    <h2>추천 곡</h2>
+    <pre>{{ recommendations }}</pre>
+
+    <a href="{{ url_for('survey') }}">다시 설문하기</a>
+</body>
+</html>

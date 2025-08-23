@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+
+# Firebase keys
+firebase_key.json
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
