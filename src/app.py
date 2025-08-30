@@ -3,24 +3,24 @@ import os
 from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, db
+import google.generativeai as genai
 from google import genai
-# import google.generativeai as genai
 
+# 🔹 .env 불러오기
+load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-# client = genai.Client()
-client = genai.Client(api_key=GEMINI_API_KEY)
+
+# 🔹 Gemini API 초기화 (최신 SDK 방식)
 # 🔹 Gemini API 초기화
+# genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 # Flask 초기화
 app = Flask(__name__)
 
-# 🔹 .env 불러오기
-load_dotenv()
-# genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
 # 🔹 Firebase 연결
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # src 폴더 경로
-cred_path = os.path.join(BASE_DIR, "firebase_key.json")  # 무조건 app.py와 같은 폴더에서 찾음
+cred_path = os.path.join(BASE_DIR, "firebase_key.json")
 db_url = os.getenv("FIREBASE_DB_URL")
 
 # 키 파일 & DB URL 체크
@@ -29,13 +29,11 @@ if not os.path.exists(cred_path):
 
 if not db_url:
     raise ValueError("❌ 환경변수 FIREBASE_DB_URL이 설정되지 않았습니다. .env 파일을 확인하세요.")
-# ????
+
 # Firebase 초기화 (중복 방지)
 if not firebase_admin._apps:
     cred = credentials.Certificate(cred_path)
-    firebase_admin.initialize_app(cred, {
-        "databaseURL": db_url
-    })
+    firebase_admin.initialize_app(cred, {"databaseURL": db_url})
 
 
 # 🔹 메인 페이지
@@ -61,7 +59,7 @@ def login():
         user = ref.get()
 
         if user and user.get("password") == password:
-            return render_template("main2.html", user_id=user_id)  # 로그인 성공
+            return render_template("main2.html", user_id=user_id)
         else:
             error = "아이디 또는 비밀번호가 잘못되었습니다."
 
@@ -104,41 +102,52 @@ def recommend():
 def survey():
     return render_template("survey.html")
 
+import time
 
-# 🔹 설문 제출 후 GPT 추천
 @app.route("/test2", methods=["GET", "POST"])
 def test2():
+    recommendations = None  # 기본값
     if request.method == "POST":
         mood = request.form.get("mood")
         genre = request.form.get("genre")
         activity = request.form.get("activity")
-
-        # Gemini API 요청
         # model = genai.GenerativeModel("gemini-pro")
+
         prompt = f"""
-        사용자의 설문 응답:
-        - 기분: {mood}
-        - 장르 선호: {genre}
-        - 현재 활동: {activity}
+사용자의 설문 응답:
+- 기분: {mood}
+- 장르 선호: {genre}
+- 현재 활동: {activity}
 
-        위 정보를 바탕으로 지금 듣기 좋은 노래 3곡을 한국어로 추천해줘.
-        (곡명 - 가수 형식으로 간단히)
-        """
+위 정보를 바탕으로 지금 듣기 좋은 노래 3곡을 한국어로 추천해줘.
+(곡명 - 가수 형식으로 간단히)
+"""
 
-        #response = model.generate_content(prompt)
-        #recommendations = response.text if response else "추천 결과를 가져오지 못했습니다."
-        recommendations = client.models.generate_content(model = "gemini-2.5-flash", contents = prompt)
+        try:
+            start_time = time.time()
+            # response = model.generate_content(prompt)
+            response = client.models.generate_content(
+                model="gemini-2.5-flash", contents=prompt
+            )
+            # 응답을 받은 후 시간이 너무 오래 걸렸는지 확인
+            if time.time() - start_time > 20:  # 20초 이상 걸리면 타임아웃 처리
+                raise TimeoutError("응답이 너무 오래 걸립니다. 다시 시도해 주세요.")
+
+            recommendations = response.text if response else "추천 결과를 가져오지 못했습니다."
+        except TimeoutError as te:
+            recommendations = f"타임아웃 오류: {str(te)}"
+        except Exception as e:
+            recommendations = f"추천 결과를 가져오지 못했습니다. 오류: {str(e)}"
+
         # 결과 페이지에 전달
-        print(f"recommendations: {recommendations}")
-        result_text = recommendations.candidates[0].content.parts[0].text
         return render_template("test2.html",
                                mood=mood,
                                genre=genre,
                                activity=activity,
-                               recommendations=result_text)
+                               recommendations=recommendations)
 
     return render_template("test2.html", recommendations=None)
-    
+
 
 if __name__ == "__main__":
     app.run(debug=True)
