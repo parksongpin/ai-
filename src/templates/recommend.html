@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>노래 추천</title>
+    <style>
+        /* 전체 기본 스타일 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Noto Sans KR", sans-serif;
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* 하늘빛 그라데이션 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        /* 컨테이너 */
+        .container {
+            background: #ffffffcc; /* 살짝 투명한 흰색 */
+            padding: 40px 60px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 제목 */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        /* 설명 */
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        /* 버튼 */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            background: #6a82fb;
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 10px rgba(106, 130, 251, 0.4);
+        }
+
+        /* 버튼 호버 */
+        .btn:hover {
+            background: #5a72e5;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(106, 130, 251, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>노래 추천 🎶</h1>
+        <p>당신의 기분에 맞는 노래를 추천해드립니다!</p>
+        <a href="{{ url_for('survey') }}" class="btn">추천받기</a>
+    </div>
+</body>
+</html>

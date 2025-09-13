@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>추천 기록</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: "Noto Sans KR", sans-serif;
+            background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .record-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feeling {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .timestamp {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .song-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .song-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .song-item:last-child {
+            border-bottom: none;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            padding: 20px;
+            background: #fdf0f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .no-records {
+            text-align: center;
+            color: #666;
+            padding: 40px 0;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: #6a82fb;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            border-radius: 30px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 10px rgba(106, 130, 251, 0.4);
+        }
+
+        .back-btn:hover {
+            background: #5a72e5;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(106, 130, 251, 0.5);
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 나의 추천 기록 🎵</h1>
+
+        {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        {% if records %}
+            {% for record in records %}
+                <div class="record-card">
+                    <div class="record-header">
+                        <div class="feeling">감정: {{ record.feeling }}</div>
+                        <div class="timestamp">
+                            {% if record.timestamp is defined and record.timestamp %}
+                                {% if record.timestamp is number %}
+                                    {{ (record.timestamp / 1000)|int|strftime('%Y년 %m월 %d일 %H:%M') }}
+                                {% else %}
+                                    {{ record.timestamp }}
+                                {% endif %}
+                            {% else %}
+                                시간 정보 없음
+                            {% endif %}
+                        </div>
+                    </div>
+                    <ul class="song-list">
+                        {% for song in record.recommendations %}
+                            <li class="song-item">{{ song }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-records">
+                저장된 추천 기록이 없습니다.
+            </div>
+        {% endif %}
+
+        <div class="btn-container" style="display: flex; gap: 20px; justify-content: center;">
+            <a href="{{ url_for('survey') }}" class="back-btn">새로운 추천 받기</a>
+            <a href="{{ url_for('main2') }}" class="back-btn">메인화면으로</a>
+        </div>
+    </div>
+</body>
+</html>

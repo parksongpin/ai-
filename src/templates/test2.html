@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>노래 추천 결과</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: "Noto Sans KR", sans-serif;
+            background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin: 5px 0;
+            background: #ffffffbb;
+            padding: 8px 15px;
+            border-radius: 10px;
+            width: fit-content;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-top: 30px;
+            font-size: 1.5rem;
+            color: #34495e;
+        }
+
+        /* 추천 곡 영역 */
+        .recommend-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+            text-align: left;
+        }
+
+        .song-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+
+        .song-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 비율 */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin: 10px 0;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        a.back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 25px;
+            background: #6a82fb;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            border-radius: 30px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 10px rgba(106, 130, 251, 0.4);
+        }
+
+        a.back-btn:hover {
+            background: #5a72e5;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(106, 130, 251, 0.5);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎶 노래 추천 결과 🎶</h1>
+
+    <p><strong>감정 상태:</strong> <span id="mood-value">{{ mood }}</span></p>
+
+    <h2>추천 곡</h2>
+    <div class="recommend-box">
+        {% if recommendations %}
+            {% for line in recommendations.split('\n') %}
+                {% if line and ' - ' in line %}
+                    {% set parts = line.split(' - ', 1) %}
+                    {% set title = parts[0].strip() %}
+                    {% set artist = parts[1].strip() %}
+                    <div class="song-item">
+                        <div class="song-title">{{ title }} - {{ artist }}</div>
+                        <div class="video-container" id="video-{{ loop.index }}">
+                            <div class="loading">로딩 중...</div>
+                        </div>
+                    </div>
+                    <script>
+                        fetch(`/api/youtube/search?title={{ title | urlencode }}&artist={{ artist | urlencode }}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.videoId) {
+                                    const container = document.querySelector('#video-{{ loop.index }}');
+                                    container.innerHTML = `
+                                        <iframe
+                                            src="https://www.youtube.com/embed/${data.videoId}"
+                                            frameborder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen>
+                                        </iframe>
+                                    `;
+                                } else if (data.error) {
+                                    throw new Error(data.error);
+                                }
+                            })
+                            .catch(error => {
+                                const container = document.querySelector('#video-{{ loop.index }}');
+                                container.innerHTML = `
+                                    <div class="error-message">
+                                        동영상을 불러올 수 없습니다. (${error.message || '알 수 없는 오류'})
+                                    </div>
+                                `;
+                            });
+                    </script>
+                {% else %}
+                    <div class="song-item">
+                        <div class="song-title">{{ line }}</div>
+                        <div class="error-message">곡 정보 형식이 올바르지 않음</div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="song-item">
+                <div class="error-message">추천 곡이 없습니다.</div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="button-container" style="display: flex; gap: 20px; margin-top: 30px;">
+        <a href="{{ url_for('survey') }}" class="back-btn">다시 설문하기</a>
+        <button class="back-btn" onclick="saveRecord()" style="border: none; cursor: pointer;">기록 저장하기</button>
+    </div>
+
+    <script>
+        function saveRecord() {
+            // 현재 추천 목록과 감정 상태를 수집
+            const recommendations = [];
+            document.querySelectorAll('.song-title').forEach(el => {
+                recommendations.push(el.textContent.trim());
+            });
+            // 감정 상태를 찾아 추출
+            let feeling = document.getElementById('mood-value').textContent;
+            if (!feeling || feeling.trim() === '') {
+                feeling = '알 수 없음';
+            }
+            feeling = feeling.trim();
+            console.log('감정:', feeling); // 디버깅용
+            console.log('추천곡:', recommendations); // 디버깅용
+
+            // 추천곡 데이터 정제
+            const cleanedRecommendations = recommendations.filter(r => r && r.trim() !== '');
+            
+            const requestData = {
+                feeling: feeling,
+                recommendations: cleanedRecommendations
+            };
+            console.log('전송할 데이터:', requestData); // 디버깅용
+
+            // 서버로 데이터 전송
+            fetch('/save_record', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(async response => {
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    return response.json().then(data => ({status: response.status, body: data}));
+                } else {
+                    return response.text().then(text => ({status: response.status, body: text}));
+                }
+            })
+            .then(({status, body}) => {
+                console.log('서버 응답:', status, body); // 디버깅용
+                if (status === 200 && body.success) {
+                    window.location.href = '/records';  // 성공하면 기록 페이지로 이동
+                } else {
+                    const errorMessage = body.error || '알 수 없는 오류가 발생했습니다.';
+                    alert('기록 저장에 실패했습니다: ' + errorMessage);
+                    console.error('저장 실패:', body);
+                }
+            })
+            .catch(error => {
+                console.error('네트워크 오류:', error);
+                alert('기록 저장 중 오류가 발생했습니다. 개발자 도구의 콘솔을 확인해주세요.');
+            });
+        }
+    </script>
+</body>
+</html>

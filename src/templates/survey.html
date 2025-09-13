@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>설문조사 | 노래 추천</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mainstyle.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 기분에 맞는 노래 추천 설문조사</h1>
+        <p>아래 설문에 응답해주세요.</p>
+
+        <!-- 제출 시 /test2 라우트로 이동 -->
+        <form action="{{ url_for('test2') }}" method="POST">
+            <!-- 기분 선택 -->
+            <label for="mood">오늘의 기분은 어떤가요?</label><br>
+            <select id="mood" name="mood" required>
+                <option value="">-- 선택하세요 --</option>
+                <option value="happy">😊 행복해요</option>
+                <option value="sad">😢 슬퍼요</option>
+                <option value="tired">😴 피곤해요</option>
+                <option value="excited">🔥 신나요</option>
+                <option value="calm">🌙 차분해요</option>
+            </select>
+            <br><br>
+
+            <!-- 장르 선택 -->
+            <label for="genre">좋아하는 음악 장르는?</label><br>
+            <select id="genre" name="genre" required>
+                <option value="">-- 선택하세요 --</option>
+                <option value="pop">팝</option>
+                <option value="kpop">K-Pop</option>
+                <option value="hiphop">힙합</option>
+                <option value="ballad">발라드</option>
+                <option value="rock">록</option>
+                <option value="jazz">재즈</option>
+            </select>
+            <br><br>
+
+            <!-- 활동 선택 -->
+            <label for="activity">지금 하고 있는 활동은?</label><br>
+            <select id="activity" name="activity" required>
+                <option value="">-- 선택하세요 --</option>
+                <option value="study">📚 공부 중</option>
+                <option value="work">💻 일하는 중</option>
+                <option value="exercise">🏃 운동 중</option>
+                <option value="relax">🛋️ 휴식 중</option>
+                <option value="travel">✈️ 여행 중</option>
+            </select>
+            <br><br>
+
+            <button type="submit" class="btn">추천 받기</button>
+        </form>
+    </div>
+</body>
+</html>

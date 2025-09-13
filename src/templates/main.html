@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>ModMate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mainstyle.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>ModMate</h1>
+        <div class="btn-group">
+            <a href="{{ url_for('login') }}" class="btn">로그인</a>
+            <a href="{{ url_for('signup') }}" class="btn">회원가입</a>
+        </div>
+    </div>
+</body>
+</html>

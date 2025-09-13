@@ -1,0 +1,141 @@
+body {
+    font-family: '맑은 고딕', sans-serif;
+    background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    width: 350px;
+    text-align: center;
+}
+
+h1, h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    margin-bottom: 12px;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #74ebd5;
+    box-shadow: 0 0 5px rgba(116,235,213,0.5);
+}
+
+.btn, button {
+    display: inline-block;
+    background: #74ebd5;
+    border: none;
+    padding: 12px;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+    text-decoration: none;
+    margin: 5px 0;
+}
+
+.btn:hover, button:hover {
+    background: #4ac9b1;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+p {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+p a {
+    color: #4ac9b1;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+.error {
+    color: red;
+    margin-bottom: 15px;
+}
+/* 전체 기본 스타일 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Noto Sans KR", sans-serif;
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* 하늘빛 그라데이션 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+/* 컨테이너 */
+.container {
+    background: #ffffffcc; /* 살짝 투명한 흰색 */
+    padding: 40px 60px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* 제목 */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+/* 설명 */
+p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+/* 버튼 */
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    background: #6a82fb;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 10px rgba(106, 130, 251, 0.4);
+}
+
+/* 버튼 호버 */
+.btn:hover {
+    background: #5a72e5;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(106, 130, 251, 0.5);
+}
