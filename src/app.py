@@ -28,7 +28,7 @@ def _jinja2_filter_datetime(date, fmt=None):
     return datetime.fromtimestamp(date).strftime(fmt)
 # 🔹 Firebase 연결
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # src 폴더 경로
-cred_path = os.path.join(BASE_DIR, "firebase_key.json")
+cred_path = os.path.join("firebase_key.json")
 db_url = os.getenv("FIREBASE_DB_URL")
 
 # 키 파일 & DB URL 체크
@@ -50,8 +50,8 @@ def index():
     return render_template("main.html")
 
 # 🔹 메인2 페이지
-@app.route("/main2")
-def main2():
+@app.route("/main1")
+def main1():
     user_id = request.args.get('user_id', '')
     ref = db.reference('users')
     user_data = ref.child(user_id).get()
@@ -126,65 +126,6 @@ def update_coins():
     
     return jsonify({'success': True, 'coins': user_data['coins']})
 
-# 🔹 메인2 페이지
-@app.route("/main2")
-def main2():
-    user_id = request.args.get('user_id', '')
-    # Firebase에서 사용자 정보 가져오기
-    ref = db.reference('users')
-    user_data = ref.child(user_id).get()
-    
-    if not user_data:
-        # 새 사용자인 경우 기본 데이터 설정
-        user_data = {
-            'coins': 100,  # 초기 코인
-            'level': 1,    # 초기 레벨
-            'exp': 0,      # 초기 경험치
-            'achievements': [],  # 업적 목록
-            'daily_check': False  # 일일 출석 체크
-        }
-        ref.child(user_id).set(user_data)
-    
-    return render_template("main2.html", user_id=user_id, user_data=user_data)
-
-# 🔹 일일 체크인
-@app.route('/daily_check', methods=['POST'])
-def daily_check():
-    user_id = request.form.get('user_id')
-    ref = db.reference(f'users/{user_id}')
-    user_data = ref.get()
-    
-    if not user_data['daily_check']:
-        # 코인과 경험치 보상
-        user_data['coins'] += 50
-        user_data['exp'] += 20
-        user_data['daily_check'] = True
-        
-        # 레벨업 체크
-        if user_data['exp'] >= user_data['level'] * 100:
-            user_data['level'] += 1
-            user_data['exp'] = 0
-        
-        ref.update(user_data)
-        return jsonify({'success': True, 'coins': user_data['coins'], 'exp': user_data['exp'], 'level': user_data['level']})
-    
-    return jsonify({'success': False, 'message': '이미 오늘의 출석체크를 완료했습니다.'})
-
-# 🔹 코인 사용/획득
-@app.route('/update_coins', methods=['POST'])
-def update_coins():
-    user_id = request.form.get('user_id')
-    amount = int(request.form.get('amount'))
-    
-    ref = db.reference(f'users/{user_id}')
-    user_data = ref.get()
-    
-    if user_data['coins'] + amount >= 0:
-        user_data['coins'] += amount
-        ref.update({'coins': user_data['coins']})
-        return jsonify({'success': True, 'coins': user_data['coins']})
-    
-    return jsonify({'success': False, 'message': '코인이 부족합니다.'})
 
 # 🔹 추천 기록 페이지
 @app.route("/records")
