@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#내코드를 수정해줘
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import os
 from dotenv import load_dotenv
@@ -32,6 +34,7 @@ cred_path = os.path.join("firebase_key.json")
 db_url = os.getenv("FIREBASE_DB_URL")
 
 # 키 파일 & DB URL 체크
+
 if not os.path.exists(cred_path):
     raise FileNotFoundError(f"❌ Firebase 키 파일을 찾을 수 없습니다: {cred_path}")
 
@@ -264,7 +267,15 @@ def login():
         user = ref.get()
 
         if user and user.get("password") == password:
-            return render_template("main2.html", user_id=user_id)
+            # Retrieve user_data and pass it to the template
+            user_data = {
+                'coins': user.get('coins', 100),
+                'level': user.get('level', 1),
+                'exp': user.get('exp', 0),
+                'achievements': user.get('achievements', []),
+                'daily_check': user.get('daily_check', False)
+            }
+            return render_template("main2.html", user_id=user_id, user_data=user_data)
         else:
             error = "아이디 또는 비밀번호가 잘못되었습니다."
 
@@ -466,6 +477,36 @@ def get_youtube_link(title, artist):
         print("YouTube API 오류:", e)
     return None
 
+# 🔹 GPT 답변 저장 API
+@app.route("/save_gpt_response", methods=["POST"])
+def save_gpt_response():
+    try:
+        # 요청 데이터 확인
+        if not request.is_json:
+            return jsonify({"success": False, "error": "Content-Type must be application/json"}), 400
+
+        data = request.get_json()
+        gpt_response = data.get("response")
+
+        if not gpt_response:
+            return jsonify({"success": False, "error": "Response data is missing"}), 400
+
+        # Firebase에 저장
+        try:
+            gpt_records_ref = db.reference("gpt_responses")
+            new_record = {
+                "response": gpt_response,
+                "timestamp": {".sv": "timestamp"}  # 서버 타임스탬프 사용
+            }
+            gpt_records_ref.push().set(new_record)
+            return jsonify({"success": True})
+        except Exception as e:
+            app.logger.error(f"Firebase 저장 오류: {e}")
+            return jsonify({"success": False, "error": f"Database error: {str(e)}"}), 500
+
+    except Exception as e:
+        app.logger.error(f"GPT 답변 저장 중 오류 발생: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

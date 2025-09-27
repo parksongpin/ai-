@@ -1,141 +1,193 @@
 body {
-    font-family: '맑은 고딕', sans-serif;
-    background: linear-gradient(135deg, #74ebd5, #ACB6E5);
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.container {
-    background: #fff;
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    width: 350px;
-    text-align: center;
-}
-
-h1, h2 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-    margin-bottom: 12px;
-    transition: 0.3s;
-}
-
-input:focus {
-    border-color: #74ebd5;
-    box-shadow: 0 0 5px rgba(116,235,213,0.5);
-}
-
-.btn, button {
-    display: inline-block;
-    background: #74ebd5;
-    border: none;
-    padding: 12px;
-    color: #fff;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
-    text-decoration: none;
-    margin: 5px 0;
-}
-
-.btn:hover, button:hover {
-    background: #4ac9b1;
-}
-
-.btn-group {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
-
-p {
-    margin-top: 15px;
-    font-size: 14px;
-}
-
-p a {
-    color: #4ac9b1;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-p a:hover {
-    text-decoration: underline;
-}
-
-.error {
-    color: red;
-    margin-bottom: 15px;
-}
-/* 전체 기본 스타일 */
-body {
     margin: 0;
     padding: 0;
-    font-family: "Noto Sans KR", sans-serif;
-    background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* 하늘빛 그라데이션 */
+    font-family: 'Noto Sans KR', sans-serif;
+    background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    color: #333;
 }
 
-/* 컨테이너 */
 .container {
-    background: #ffffffcc; /* 살짝 투명한 흰색 */
-    padding: 40px 60px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 50px 70px; /* Increased padding for better visibility */
     border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    width: 95%; /* Increased width */
+    max-width: 900px; /* Increased max width */
     text-align: center;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* 제목 */
 h1 {
-    font-size: 2.5rem;
+    font-size: 3rem; /* Enlarged font size */
+    margin-bottom: 30px;
+    color: #2c3e50;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-message {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #34495e;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.feature-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    width: 45%;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
     margin-bottom: 10px;
     color: #2c3e50;
 }
 
-/* 설명 */
-p {
-    font-size: 1.1rem;
-    margin-bottom: 30px;
+.feature-card p {
+    font-size: 1rem;
     color: #555;
+    margin-bottom: 20px;
 }
 
-/* 버튼 */
 .btn {
     display: inline-block;
-    padding: 12px 25px;
-    font-size: 1.2rem;
+    padding: 12px 30px;
+    font-size: 1rem;
     border-radius: 30px;
-    background: #6a82fb;
+    background: linear-gradient(45deg, #6a82fb, #fc5c7d);
     color: #fff;
     text-decoration: none;
-    transition: 0.3s ease;
-    box-shadow: 0 4px 10px rgba(106, 130, 251, 0.4);
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(106, 130, 251, 0.4);
 }
 
-/* 버튼 호버 */
 .btn:hover {
-    background: #5a72e5;
+    background: linear-gradient(45deg, #fc5c7d, #6a82fb);
     transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(106, 130, 251, 0.5);
+    box-shadow: 0 6px 20px rgba(106, 130, 251, 0.5);
+}
+
+/* Progress Bar Styling */
+.progress-bar {
+    width: 100%;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px 0;
+    height: 20px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(45deg, #74ebd5, #4ac9b1);
+    width: 0%; /* Dynamic width */
+    transition: width 0.4s ease-in-out;
+}
+
+/* Updated Button Styles */
+.check-btn, .btn {
+    padding: 12px 30px;
+    font-size: 1rem;
+    border-radius: 30px;
+    background: linear-gradient(45deg, #6a82fb, #fc5c7d);
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(106, 130, 251, 0.4);
+}
+
+.check-btn:hover, .btn:hover {
+    background: linear-gradient(45deg, #fc5c7d, #6a82fb);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(106, 130, 251, 0.5);
+}
+
+/* Survey Section Styling */
+label {
+    font-size: 1.2rem; /* Increased label font size */
+    color: #34495e;
+    margin-bottom: 10px;
+    display: block;
+}
+
+select {
+    width: 80%; /* Increased width */
+    padding: 10px; /* Increased padding */
+    font-size: 1.2rem; /* Enlarged font size */
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+button.btn {
+    padding: 15px 40px; /* Increased button size */
+    font-size: 1.2rem; /* Enlarged font size */
+    border-radius: 30px;
+    background: linear-gradient(45deg, #6a82fb, #fc5c7d);
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(106, 130, 251, 0.4);
+}
+
+button.btn:hover {
+    background: linear-gradient(45deg, #fc5c7d, #6a82fb);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(106, 130, 251, 0.5);
+}
+
+/* 기록 저장하기 버튼 스타일 수정 */
+button.record-save-btn {
+    padding: 12px 25px; /* 버튼 크기 조정 */
+    font-size: 1.1rem; /* 글자 크기 조정 */
+    border-radius: 15px; /* 둥근 모서리 */
+    background: linear-gradient(45deg, #6a82fb, #fc5c7d); /* 그라디언트 배경 */
+    color: #fff; /* 텍스트 색상 */
+    border: none; /* 테두리 제거 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    cursor: pointer; /* 클릭 가능 표시 */
+    transition: background 0.3s, transform 0.2s; /* 애니메이션 효과 */
+}
+
+button.record-save-btn:hover {
+    background: linear-gradient(45deg, #fc5c7d, #6a82fb); /* 호버 시 배경 변경 */
+    transform: translateY(-3px); /* 호버 시 살짝 올라감 */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 강화 */
+}
+
+/* 버튼 컨테이너 정렬 */
+.button-container {
+    display: flex;
+    justify-content: center; /* 버튼 중앙 정렬 */
+    gap: 20px; /* 버튼 간격 */
+    margin-top: 30px; /* 상단 여백 */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature-card {
+        width: 90%;
+        margin-bottom: 20px;
+    }
 }

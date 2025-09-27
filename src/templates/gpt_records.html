@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>GPT 답변 기록</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mainstyle.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📜 GPT 답변 기록</h1>
+        <div class="record-list">
+            {% if gpt_responses %}
+                {% for record in gpt_responses %}
+                    <div class="record-item">
+                        <p><strong>답변:</strong> {{ record.response }}</p>
+                        <p><small>저장 시간: {{ record.timestamp }}</small></p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>저장된 GPT 답변이 없습니다.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

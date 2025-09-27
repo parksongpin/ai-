@@ -102,6 +102,27 @@
             font-size: 0.9rem;
             margin-top: 5px;
         }
+
+        .record-save-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 25px;
+            background: #28a745;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            border-radius: 30px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+
+        .record-save-btn:hover {
+            background: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -166,7 +187,7 @@
 
     <div class="button-container" style="display: flex; gap: 20px; margin-top: 30px;">
         <a href="{{ url_for('survey') }}" class="back-btn">다시 설문하기</a>
-        <button class="back-btn" onclick="saveRecord()" style="border: none; cursor: pointer;">기록 저장하기</button>
+        <button class="record-save-btn" onclick="saveRecord()">기록 저장하기</button>
     </div>
 
     <script>
