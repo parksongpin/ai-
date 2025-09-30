@@ -8,6 +8,7 @@ from firebase_admin import credentials, db
 import google.generativeai as genai
 from google import genai
 import requests
+from datetime import datetime
 
 # 🔹 .env 불러오기
 load_dotenv()
@@ -507,6 +508,34 @@ def save_gpt_response():
     except Exception as e:
         app.logger.error(f"GPT 답변 저장 중 오류 발생: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
+@app.post("/save_record")
+def save_record_endpoint():
+    try:
+        data = request.get_json(force=True)  # {mood, items: [{title,artist,videoId,...}], createdAt, ...}
+        mood = data.get("mood")
+        items = data.get("items", [])
+        assert isinstance(items, list) and all("title" in it and "artist" in it for it in items)
+
+        record = {
+            "mood": mood,
+            "items": items,
+            "createdAtClient": data.get("createdAt"),
+            "createdAtServer": datetime.utcnow().isoformat() + "Z",
+            "userAgent": request.headers.get("User-Agent"),
+        }
+        # TODO: Firebase에 push(record), key 반환
+        record_id = save_to_firebase(record)  # 사용자별 경로로 저장 권장
+
+        return jsonify(success=True, id=record_id)
+    except Exception as e:
+        app.logger.exception("save_record failed")
+        return jsonify(success=False, error=str(e)), 400
+
+def save_to_firebase(record):
+    # Placeholder implementation for saving to Firebase
+    ref = db.reference('records')
+    new_record_ref = ref.push(record)
+    return new_record_ref.key
 
 if __name__ == "__main__":
     app.run(debug=True)
