@@ -350,5 +350,10 @@ async function saveRecord() {
   }
 }
     </script>
+    <script>
+        function saveRecord() {
+            window.location.href = "{{ url_for('records') }}";
+        }
+    </script>
 </body>
 </html>

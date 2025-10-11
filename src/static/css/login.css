@@ -1,0 +1,83 @@
+/* login.css - 로그인 페이지 전용 스타일 */
+body {
+    background: #f5f6fa;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.login-container {
+    width: 350px;
+    margin: 80px auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 40px 30px 30px 30px;
+}
+
+.login-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #2d3436;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #636e72;
+    font-size: 1rem;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 18px;
+    border: 1px solid #dfe6e9;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: #f9f9f9;
+    transition: border 0.2s;
+}
+
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus {
+    border-color: #0984e3;
+    outline: none;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 12px;
+    background: #0984e3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.login-form button:hover {
+    background: #74b9ff;
+}
+
+.login-links {
+    text-align: center;
+    margin-top: 18px;
+}
+
+.login-links a {
+    color: #636e72;
+    text-decoration: none;
+    font-size: 0.95rem;
+    margin: 0 8px;
+    transition: color 0.2s;
+}
+
+.login-links a:hover {
+    color: #0984e3;
+}
