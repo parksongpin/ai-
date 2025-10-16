@@ -214,41 +214,41 @@ def save_record():
 
 # 🔹 기록 보기 페이지
 @app.route("/records")
-def view_records():
+def records_page():
     try:
-        # Firebase에서 기록 가져오기
-        records_ref = db.reference("records")
-        records = records_ref.get()
-        
-        # 기록이 없는 경우 빈 리스트로 처리
-        if not records:
-            records = []
-        else:
-            # 딕셔너리를 리스트로 변환하고 timestamp로 정렬
-            processed_records = []
-            for key, record in records.items():
-                if isinstance(record, dict):
-                    record_copy = record.copy()
-                    record_copy['id'] = key
-                    # timestamp가 있고 숫자인지 확인
-                    if 'timestamp' in record_copy and isinstance(record_copy['timestamp'], (int, float)):
-                        processed_records.append(record_copy)
-                    else:
-                        # timestamp가 없거나 잘못된 형식이면 현재 시간으로 설정
-                        from time import time
-                        record_copy['timestamp'] = int(time() * 1000)
-                        processed_records.append(record_copy)
-            
-            # timestamp로 정렬
-            records = sorted(processed_records, 
-                           key=lambda x: x.get('timestamp', 0), 
-                           reverse=True)
-        
-        app.logger.info(f"처리된 레코드: {records}")  # 디버깅을 위한 로그
+        ref = db.reference("records")
+        snapshot = ref.get()
+    
+        if not snapshot:
+            return render_template("records.html", records=[])
+
+        # Firebase에서 받아온 raw 데이터를 HTML에 맞게 가공
+        records = []
+        for key, value in snapshot.items():
+            mood = value.get("mood", "감정 정보 없음")
+            items = value.get("items", [])
+            created_at = value.get("createdAtClient") or value.get("createdAtServer")
+
+            recommendations = [
+                f"{item.get('title', '')} - {item.get('artist', '')}"
+                for item in items
+            ]
+
+            records.append({
+                "feeling": mood,
+                "timestamp": created_at,
+                "recommendations": recommendations
+            })
+
+        # 최신순 정렬 (옵션)
+        records.sort(key=lambda r: r["timestamp"], reverse=True)
+
         return render_template("records.html", records=records)
+
     except Exception as e:
-        app.logger.error(f"기록 조회 중 오류 발생: {e}")
-        return render_template("records.html", error=str(e), records=[])
+        app.logger.error(f"Error loading records: {e}")
+        return render_template("records.html", error="기록을 불러오는 중 오류가 발생했습니다.", records=[])
+
 
 
 # 🔹 로그인 페이지
@@ -539,3 +539,4 @@ def save_to_firebase(record):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
